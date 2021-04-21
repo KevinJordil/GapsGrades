@@ -1,0 +1,10 @@
+{
+    "username" : "",
+    "password" : "",
+    "telegram" : {
+        "token" : "",
+        "chatId" : ""
+    }
+    
+
+}
