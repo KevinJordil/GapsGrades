@@ -2,6 +2,10 @@
 
 Sends a Telegram notification when there is a new note on Gaps
 
+## Installation
+
+```npm -i```
+
 ## Configuration
 
 In the config file, you have to fill in the username and password of your AAI account.
