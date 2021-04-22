@@ -66,8 +66,18 @@ const { exit } = require('process');
 
   console.log("Saved !")
 
+
+  // Compare image
   if (fs.existsSync('./old.png')) {
     console.log("Compare with last time...")
+
+
+    function rename() {
+      fs.rename('./current.png', './old.png', () => {
+        console.log("Save current for next time!");
+      });
+    }
+
 
     looksSame('./current.png', './old.png', function(error, {equal}) {
       if (!equal) {
@@ -77,18 +87,21 @@ const { exit } = require('process');
         const bot = new TelegramBot(config.telegram.token, { polling: true });
         
         const photo = fs.createReadStream('./current.png')
-        bot.sendPhoto(config.telegram.chatId, photo, { caption: "Il y a du changement" })
+        bot.sendPhoto(config.telegram.chatId, photo, { caption: "Il y a du changement" }).then(() => {
+          rename()
+        })
   
+
+
         console.log("Sended!")
       } else {
         console.log("Same from last time!")
+        rename()
       }
 
-      fs.rename('./current.png', './old.png', () => {
-        console.log("Save current for next time!");
-      });
+    })
 
-    });
+
 
 
 
