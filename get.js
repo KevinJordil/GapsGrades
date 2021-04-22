@@ -3,7 +3,8 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 var config = require('./config.json');
 var looksSame = require('looks-same');
-const { exit } = require('process');
+const { SSL_OP_EPHEMERAL_RSA } = require('constants');
+const { resolve } = require('path');
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -13,8 +14,8 @@ const { exit } = require('process');
   const page = await browser.newPage();
 
   // Gaps login
-  await page.goto('https://gaps.heig-vd.ch/consultation/controlescontinus/consultation.php?idst=15635');
   console.log("Load gaps login...")
+  await page.goto('https://gaps.heig-vd.ch/consultation/controlescontinus/consultation.php?idst=15635');
   await page.waitForSelector('select[id="user_idp"]', {
     visible: true,
   });
@@ -60,57 +61,50 @@ const { exit } = require('process');
   grades = await page.$('div[id="result"]');
   try {
     await grades.screenshot({ path: './current.png' });
-  } catch(e) {
+  } catch (e) {
     console.log("error :" + e)
   }
 
   console.log("Saved !")
 
-
-  function rename() {
-    fs.rename('./current.png', './old.png', () => {
-      console.log("Save current for next time!");
-    });
-  }
-
   // Compare image
   if (fs.existsSync('./old.png')) {
     console.log("Compare with last time...")
 
+    await new Promise((resolve) => {
+      looksSame('./current.png', './old.png', async function (error, { equal }) {
+        if (!equal) {
+          console.log("Different from last time!")
+          console.log("Send notification...")
 
-    looksSame('./current.png', './old.png', function(error, {equal}) {
-      if (!equal) {
-        console.log("Different from last time!")
-        console.log("Send notification...")
-  
-        const bot = new TelegramBot(config.telegram.token, { polling: true });
-        
-        const photo = fs.createReadStream('./current.png')
-        bot.sendPhoto(config.telegram.chatId, photo, { caption: "Il y a du changement" }).then(() => {
-          rename()
-        })
-  
+          const bot = new TelegramBot(config.telegram.token, { polling: true });
+
+          const photo = fs.createReadStream('./current.png')
+          await bot.sendPhoto(config.telegram.chatId, photo, { caption: "Il y a du changement" })
+          
+          console.log("Sended!")
 
 
-        console.log("Sended!")
-      } else {
-        console.log("Same from last time!")
-        rename()
-      }
+        } else {
+          console.log("Same from last time!")
+        }
 
+        resolve()
+      })
     })
-
-
-
 
 
   } else {
     console.log('First time use script! Nothing to compare!')
-    rename()
+
   }
 
+  fs.rename('./current.png', './old.png', () => {
+    console.log("Save current for next time!");
+  });
+
+  browser.close()
 
 
-  await browser.close();
-  exit(0)
 })();
+
