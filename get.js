@@ -104,7 +104,7 @@ const { resolve } = require('path');
   });
 
   browser.close()
-
+  process.exit(0)
 
 })();
 
