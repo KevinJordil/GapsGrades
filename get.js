@@ -67,16 +67,15 @@ const { exit } = require('process');
   console.log("Saved !")
 
 
+  function rename() {
+    fs.rename('./current.png', './old.png', () => {
+      console.log("Save current for next time!");
+    });
+  }
+
   // Compare image
   if (fs.existsSync('./old.png')) {
     console.log("Compare with last time...")
-
-
-    function rename() {
-      fs.rename('./current.png', './old.png', () => {
-        console.log("Save current for next time!");
-      });
-    }
 
 
     looksSame('./current.png', './old.png', function(error, {equal}) {
@@ -107,6 +106,7 @@ const { exit } = require('process');
 
   } else {
     console.log('First time use script! Nothing to compare!')
+    rename()
   }
 
 
