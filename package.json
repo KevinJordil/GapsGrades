@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "fs": "*",
-    "html2json": "^1.0.2",
+    "looks-same": "^7.3.0",
     "node-telegram-bot-api": "^0.52.0",
     "puppeteer": "^9.0.0"
   }
