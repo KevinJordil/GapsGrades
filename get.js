@@ -1,10 +1,9 @@
+process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 var config = require('./config.json');
 var looksSame = require('looks-same');
-const { SSL_OP_EPHEMERAL_RSA } = require('constants');
-const { resolve } = require('path');
 
 (async () => {
   const browser = await puppeteer.launch({
