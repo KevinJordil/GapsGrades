@@ -7,10 +7,13 @@ var looksSame = require('looks-same');
 
 (async () => {
   const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    defaultViewport: null
     //headless: false
   });
 
   const page = await browser.newPage();
+  await page.setViewport({width: 1920, height: 1920, deviceScaleFactor: 2});
 
   // Gaps login
   console.log("Load gaps login...")
@@ -57,9 +60,11 @@ var looksSame = require('looks-same');
 
   console.log("Save HTML to image")
 
-  grades = await page.$('div[id="result"]');
+  grades = await page.$('table[class="displayArray"]');
   try {
-    await grades.screenshot({ path: './current.png' });
+    await grades.screenshot({
+       path: './notes.png'
+      });
   } catch (e) {
     console.log("error :" + e)
   }
@@ -71,15 +76,15 @@ var looksSame = require('looks-same');
     console.log("Compare with last time...")
 
     await new Promise((resolve) => {
-      looksSame('./current.png', './old.png', async function (error, { equal }) {
+      looksSame('./notes.png', './old.png', async function (error, { equal }) {
         if (!equal) {
           console.log("Different from last time!")
           console.log("Send notification...")
 
           const bot = new TelegramBot(config.telegram.token, { polling: true });
 
-          const photo = fs.createReadStream('./current.png')
-          await bot.sendPhoto(config.telegram.chatId, photo, { caption: "Il y a du changement" })
+          const photo = fs.createReadStream('./notes.png')
+          await bot.sendDocument(config.telegram.chatId, photo, { caption: "Il y a du changement" })
           
           console.log("Sended!")
 
@@ -98,7 +103,7 @@ var looksSame = require('looks-same');
 
   }
 
-  fs.rename('./current.png', './old.png', () => {
+  fs.rename('./notes.png', './old.png', () => {
     console.log("Save current for next time!");
   });
 
@@ -106,4 +111,3 @@ var looksSame = require('looks-same');
   process.exit(0)
 
 })();
-
