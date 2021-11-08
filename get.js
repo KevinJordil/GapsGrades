@@ -9,7 +9,7 @@ var looksSame = require('looks-same');
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     defaultViewport: null
-    //headless: false
+    headless: false
   });
 
   const page = await browser.newPage();
