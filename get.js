@@ -6,10 +6,7 @@ var config = require('./config.json');
 var looksSame = require('looks-same');
 
 (async () => {
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    defaultViewport: null
-  });
+  const browser = await puppeteer.launch({executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--headless', '--disable-gpu']});
 
   const page = await browser.newPage();
   await page.setViewport({width: 1920, height: 1920, deviceScaleFactor: 2});
