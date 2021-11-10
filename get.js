@@ -9,7 +9,7 @@ var looksSame = require('looks-same');
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     defaultViewport: null
-    //headless: false
+    // headless: false // For debug
   });
 
   const page = await browser.newPage();
@@ -17,7 +17,7 @@ var looksSame = require('looks-same');
 
   // Gaps login
   console.log("Load gaps login...")
-  await page.goto('https://gaps.heig-vd.ch/consultation/controlescontinus/consultation.php?idst=15635');
+  await page.goto('https://gaps.heig-vd.ch/consultation/controlescontinus/consultation.php');
   await page.waitForSelector('select[id="user_idp"]', {
     visible: true,
   });
@@ -27,12 +27,15 @@ var looksSame = require('looks-same');
   await page.select('#user_idp', 'https://aai-logon.hes-so.ch/idp/shibboleth')
 
   console.log("Click on connect button")
-  await page.click('#wayf_submit_button');
+  await page.waitForSelector('button[id="wayf_submit_button"]', {
+    visible: true,
+  });
+  await page.click('#wayf_submit_button')
 
 
   // AII login
   console.log("Load page AAI login...")
-  await page.waitForSelector('button[id="btn-submit"]', {
+  await page.waitForSelector('button[id="login-button"]', {
     visible: true,
   });
   console.log("Loaded !")
@@ -42,7 +45,7 @@ var looksSame = require('looks-same');
   await page.type('#password', config.password);
 
   console.log("Click on connect HES-SO button")
-  await page.click('#btn-submit');
+  await page.click('#login-button');
 
 
   // Gaps grades
