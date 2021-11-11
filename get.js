@@ -27,9 +27,6 @@ var looksSame = require('looks-same');
   await page.select('#user_idp', 'https://aai-logon.hes-so.ch/idp/shibboleth')
 
   console.log("Click on connect button")
-  await page.waitForSelector('button[id="wayf_submit_button"]', {
-    visible: true,
-  });
   await page.click('#wayf_submit_button')
 
 
