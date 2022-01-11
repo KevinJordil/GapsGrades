@@ -1,4 +1,4 @@
-# Gapse new grades notifier
+# Gaps new grades notifier
 
 Sends a Telegram notification when there is a new note on Gaps
 
