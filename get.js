@@ -53,9 +53,16 @@ var looksSame = require('looks-same');
   console.log("Loaded !")
 
   console.log("load grades...")
-  await page.waitForSelector('table[class="displayArray"]', {
-    visible: true,
-  });
+  try {
+    await page.waitForSelector('table[class="displayArray"]', {
+      visible: true,
+    });
+  } catch (error) {
+    console.log("Error while loading grades")
+    browser.close()
+    process.exit(0)
+  }
+
   console.log("Grades loaded !")
 
   console.log("Save HTML to image")
