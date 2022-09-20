@@ -1,0 +1,2 @@
+# min hour day month weekday command
+*/10 * * * * node /home/node/app/get.js >> /var/log/cron.log 2>&1
