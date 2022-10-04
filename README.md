@@ -17,6 +17,7 @@ In the configuration file you have to enter several information:
 * Your AAI username and password
 * The id of the Telegram bot (there are many tutorials on the internet to create one)
 * The id of the conversation/group with the bot (You can find how to get it on the internet)
+* The Semester you want : `All`, `S1` or `S2`. For `All` you need to enter "-1", for `S1` you need to enter "0" and for `S2` you need to enter "1".
 
 ## Usage
 

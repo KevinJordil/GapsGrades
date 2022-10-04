@@ -4,7 +4,6 @@
     "telegram" : {
         "token" : "",
         "chatId" : ""
-    }
-    
-
+    },
+    "semester" : "-1"
 }

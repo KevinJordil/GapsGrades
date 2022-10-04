@@ -59,6 +59,12 @@ var looksSame = require('looks-same');
   }
   console.log("Loaded !")
 
+  console.log("Select semester")
+  await page.select('#selta', config.semester)
+  
+  await new Promise(r => setTimeout(r, 200));
+
+
   console.log("load grades...")
   try {
     await page.waitForSelector('table[class="displayArray"]', {
