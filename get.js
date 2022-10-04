@@ -47,9 +47,16 @@ var looksSame = require('looks-same');
 
   // Gaps grades
   console.log("Load grades page...")
-  await page.waitForSelector('td[class="titreBox"]', {
-    visible: true,
-  });
+  try {
+    await page.waitForSelector('td[class="titreBox"]', {
+      visible: true,
+    });
+  } catch (error) {
+    console.log("Error while loading grades page !")
+    console.log("Check your credentials !")
+    browser.close()
+    process.exit(0)
+  }
   console.log("Loaded !")
 
   console.log("load grades...")
